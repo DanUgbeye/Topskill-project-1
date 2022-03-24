@@ -7,15 +7,20 @@ const { createUser } = require('./data');
 app.use(express.json());
 
 app.route('/').post( (req, res) => {
-  // console.log(req.body);
+
+  //if no body is provided
   if(!req.body) res.send('no data sent');
   const { firstName, lastName } = req.body;
   
+  //this creates a user object with the required parameters
   const data = createUser(firstName, lastName);
   const path = `qrcodes/${data.id}.png`;
+
+  //this creates the qrcode and saves it to qrcodes folder
   qrCode.toFile( path, [{
     data: JSON.stringify(data)
   }])
+
   const qrCodePath = `${process.env.HOST}/${path}`;
   res.send(qrCodePath);
 });
